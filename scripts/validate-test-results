@@ -1,5 +1,11 @@
 #!/usr/bin/env perl
 
+# Copyright 2023 SUSE LLC
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+use strict;
+use warnings;
+
 use Mojo::JSON qw(decode_json);
 use Mojo::Path;
 use Mojo::File qw(path);
