@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+
+use Mojo::JSON qw(decode_json);
+use Mojo::Path;
+use Mojo::File qw(path);
+
+my @args = @ARGV;
+my @test_results_to_check = ();
+
+while(@args){
+	my $arg = shift @args;
+	@args = (@args, glob("$arg/result-*.json")) if -d $arg;
+	next unless $arg =~ m/result-.+\.json$/;
+	push @test_results_to_check, $arg if -f $arg;
+}
+
+while(@test_results_to_check){
+	my $path = Mojo::Path->new(shift @test_results_to_check)->canonicalize;
+	my $result = decode_json(path($path)->slurp)->{result};
+
+	printf "Test result [%s] -> [%s]\n", $path->to_string, $result;
+	exit 1 unless $result eq 'ok';
+}
+
+exit 0;
